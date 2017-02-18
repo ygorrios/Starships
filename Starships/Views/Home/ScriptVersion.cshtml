@@ -1,0 +1,87 @@
+﻿
+@{
+    ViewBag.Title = "Starships - JavaScript";
+}
+
+
+<fieldset>
+    <legend>
+        <i class="fa fa-search"></i> Starships - JavaScript
+    </legend>
+    
+    <br />
+    <label>Distancia(MGLT): </label>
+    <input id="distanceInput" type="text" value="" />
+    <button id="btnCalc" type="button">Calculate</button>
+    <br />
+    <br />
+    <div class="col-sm-offset-0 col-sm-6">
+        <input type="button" class="btn btn-default" value="ASP.NET Version" onclick="location.href='@Url.Action("Index", "Home")'" />
+    </div>
+    <br />
+    <br />
+    <br />
+
+    <div id="result">
+
+    </div>
+</fieldset>
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/bootstrap")
+
+<script language="javascript" type="text/javascript">
+
+    $(document).ready(
+        function () {
+            $('#btnCalc').on('click', function () {
+
+                var txtMGLT = $('#distanceInput').val();
+                var urlajax = 'http://swapi.co/api/starships/';
+                var textResult = '';
+
+                $.ajax(
+                    {
+                        url: urlajax
+                    }).done(function (data) {
+                        if (data.results) {
+                            for (var i = 0; i < data.results.length; i++) {
+
+                                var starship = data.results[i];
+                                var name = starship.name;
+                                var consumables = starship.consumables;
+                                var MGLT = 0;
+                                var stops = 0;
+                                if (starship.MGLT != 'unknown')
+                                    MGLT = starship.MGLT;
+                                var consumablesSplit = consumables.split(" ");
+                                if (consumablesSplit.length == 2 && MGLT != 0) {
+                                    var number = parseInt(consumablesSplit[0]);
+                                    var strTime = consumablesSplit[1];
+                                    var consumablesDays = getDays(number, strTime);
+                                    var hours = parseInt(txtMGLT) / MGLT;
+                                    var days = hours / 24;
+                                    stops = parseInt(days / consumablesDays);
+                                }
+                                textResult += '<p><label><bold>' + name + '</bold></label> -> ' + stops + ' </p>'
+                            };
+                            $('#result').html(textResult);
+                        }
+                    }).fail(function () {
+                        consulta = false;
+                    });
+            });
+
+            function getDays(number, strtime) {
+                var str = 0;
+                var values = [['years', 365], ['month', 30], ['week', 7], ['day', 1], ['year', 365], ['months', 30], ['weeks', 7], ['days', 1]];
+                for (var i = 0; i < values.length; i++) {
+                    if (values[i][0] == strtime) {
+                        str = values[i][1] * number;
+                        return str;
+                    }
+                }
+                return -1;
+            }
+        }
+        );
+</script>

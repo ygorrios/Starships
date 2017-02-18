@@ -1,0 +1,29 @@
+﻿@{
+    ViewBag.Title = "Starships - ASP.NET";
+}
+
+
+@using (Html.BeginForm("Result", "Home"))
+    {
+    <fieldset>
+        <legend>
+            <i class="fa fa-search"></i> Starships - ASP.NET (Home)
+        </legend>
+        <form id="frmPesquisa" class="form-horizontal" role="form">
+            <div class="form-group">
+                <label for="txtDistance" class="col-sm-2 control-label">Distance(MGLT)</label>
+                <div class="col-md-3">
+                    <input type="text" class="form-control input-sm" name="txtDistance" id="txtDistance" required>
+                </div>
+                <div class="col-sm-offset-0 col-sm-6">
+                    <input type="submit" class="btn btn-info" value="Calculate" />
+                </div>
+
+                <div class="col-sm-offset-0 col-sm-6">
+                    <input type="button" class="btn btn-default" value="Script Version" onclick="location.href='@Url.Action("ScriptVersion", "Home")'" />
+                </div>
+            </div>
+        </form>
+    </fieldset>
+}
+
